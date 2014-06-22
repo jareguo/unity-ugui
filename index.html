@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>unity-ugui-evaluation by jaredoc</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>unity-ugui-evaluation</h1>
+        <p>Evaluation of the Unity 4.6 New UI System</p>
+
+        <p class="view"><a href="https://github.com/jaredoc/unity-ugui">View the Project on GitHub <small>jaredoc/unity-ugui</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/jaredoc/unity-ugui/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/jaredoc/unity-ugui/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/jaredoc/unity-ugui">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="unity-46-%E6%96%B0ui%E7%B3%BB%E7%BB%9Fugui%E8%AF%84%E4%BC%B0" class="anchor" href="#unity-46-%E6%96%B0ui%E7%B3%BB%E7%BB%9Fugui%E8%AF%84%E4%BC%B0"><span class="octicon octicon-link"></span></a>Unity 4.6 新UI系统(uGUI)评估</h1>
+
+<p>test test test
+执行效率 控件类型 渲染原理</p>
+
+<h1>
+<a name="%E5%BC%95%E8%A8%80" class="anchor" href="#%E5%BC%95%E8%A8%80"><span class="octicon octicon-link"></span></a>引言</h1>
+
+<p>Unity终于在即将到来的<strong>4.6</strong>版本内集成了<strong>所见即所得</strong>的UI解决方案。事实上从近几个版本开始，Unity就在为这套系统做技术扩展，以保证最终能实现较理想的UI系统。本文试图通过初步的介绍和试用，来评估这套UI系统好不好用，适合用在什么项目。此外，我谨以ex2D v2.0联名作者的视角，代表小部分插件作者做出评价，探讨将来第三方UI插件的生存之道。为论述方便，下文将这套New UI System简称为<strong>uGUI</strong>，并且以<strong>X-UI</strong>指代现有第三方UI插件。</p>
+
+<h1>
+<a name="rect-transform" class="anchor" href="#rect-transform"><span class="octicon octicon-link"></span></a>Rect Transform</h1>
+
+<p><img src="img/RectTransform.png" alt="Rect Transform"></p>
+
+<p>Rect Transform是uGUI相比X-UI最显著的区别[注1]。当你为Empty GameObject加入一个UI Component时，Transform会自动转换为Rect Transform。Rect Transform尽量整合了X-UI常见的<strong>anchor</strong>(相对父物体的锚点), <strong>pivot</strong>(中点), <strong>stretch</strong>(拉伸)等属性。</p>
+
+<p>值得一提的是，这里的<strong>anchor</strong>是Rect而非Vector2，因为它不仅用于偏移，而且用于缩放。点击Rect Transform上的准心图标，还能在弹出的<strong>Anchor Presets</strong>面板中对其进行快速设置。这个面板不是很直观，理解的关键在于把它看成一张表，上面四个图标用于设置列，左边四个图标用于设置行，也可以直接点击里面的16个图标同时设置行和列。强大的地方是，按住<strong>shift</strong>时能同时设置<strong>pivot</strong>，这时能发现控件虽然不动但position已经在改变。如果按住<strong>alt</strong>，则设置anchor的同时设置<strong>position</strong>。如果shift和alt同时按住，那么你就能同时设置anchor, pivot和position。这个操作方式比起X-UI，真的高明很多，对多分辨率适配很有帮助。</p>
+
+<p><img src="img/AnchorPresets.png" alt="Anchor Presets"></p>
+
+<h1>
+<a name="%E6%8E%A7%E4%BB%B6" class="anchor" href="#%E6%8E%A7%E4%BB%B6"><span class="octicon octicon-link"></span></a>控件</h1>
+
+<p><img src="img/UiComponent.png" alt="UI Component"></p>
+
+<p>Unity自带了以下控件：</p>
+
+<ul>
+<li>Image (用于显示Sprite)</li>
+<li>Text</li>
+<li>Raw Image (用于显示Texture)</li>
+<li>Image Mask (用于clipping)</li>
+<li>Rect Mask (用于clipping)</li>
+<li>Button</li>
+<li>Input Field</li>
+<li>Scrollbar</li>
+<li>Scroll Rect</li>
+<li>Slider</li>
+<li>Toggle</li>
+<li>Toggle Group</li>
+<li>Selectable</li>
+</ul><p>Unity的控件是通过组合的形式进行封装的，也就是说当你创建一个Button，你实际上得到了两个GameObject，一个用于绘制按钮本身，一个用于绘制按钮上的文本。这样的设计比X-UI更贴近UI的发展趋势，但容易误操作，用户想修改Button时，很容易修改到Label。</p>
+
+<p><img src="img/EventComponent.png" alt="Event Component"></p>
+
+<h1>
+<a name="%E6%80%BB%E7%BB%93%E6%9C%89%E5%BE%85%E6%94%B9%E8%BF%9B%E7%9A%84%E5%9C%B0%E6%96%B9" class="anchor" href="#%E6%80%BB%E7%BB%93%E6%9C%89%E5%BE%85%E6%94%B9%E8%BF%9B%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="octicon octicon-link"></span></a>总结，有待改进的地方</h1>
+
+<ul>
+<li>用户想修改Button时，很容易修改到Label。</li>
+<li>Anchor Presets面板还不够直观。</li>
+</ul><h1>
+<a name="%E9%99%84%E6%B3%A8" class="anchor" href="#%E9%99%84%E6%B3%A8"><span class="octicon octicon-link"></span></a>附注</h1>
+
+<ol>
+<li>我们在其它平台上开发类Entity-Component框架时，就讨论过Unity为什么不对transform做特殊处理，以避免插件作者手工缓存transform来优化query transform引起的开销，甚至是将transform统一整合进GameObject。原因是现在的transform是3D的，将来完全可能推出2D Transform。所以Unity之前的版本里，这一层设计看似冗余，但是有原因的。</li>
+<li>Unity的部分UI模块以包的形式提供，位于程序目录下的<em>Editor\Data\UnityExtensions\Unity\GUISystem\4.6.0</em>，Unity提供了两个运行时版本的DLL，分别用于创作和发布。区别主要是发布版不含一些Editor中才用得到的代码。由于DLL没办法通过预编译符号来进行条件编译，因此Unity使用这种方式进行权衡，用户发布时无需手工切换DLL版本，满足了闭源，又兼顾了执行效率。<del>这样就甩开了第三方插件几条街，很多插件在这个问题上不是牺牲性能就是无奈开源。</del>
+</li>
+</ol>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/jaredoc">jaredoc</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
