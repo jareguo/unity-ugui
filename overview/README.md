@@ -9,11 +9,11 @@ Unity终于在即将到来的**4.6**版本内集成了**所见即所得**的UI�
 
 Rect Transform
 =========
-![Rect Transform](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/img/RectTransform.png)
+![Rect Transform](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/overview/img/RectTransform.png)
 
 Rect Transform继承自Transform，是uGUI相比X-UI最显著的区别[[注1](#why_transform)]。当你为Empty GameObject加入一个UI Component时，Transform会自动转换为Rect Transform。Rect Transform尽量整合了X-UI常见的**anchor**(相对父物体的锚点), **pivot**(中点), **stretch**(拉伸)等属性。值得一提的是，这里的**anchor**是Rect而非Vector2，因为它不仅用于偏移，而且用于缩放。点击Rect Transform上的准心图标，还能在弹出的**Anchor Presets**面板中对其进行快速设置。
 
-![Anchor Presets](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/img/AnchorPresets.png)
+![Anchor Presets](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/overview/img/AnchorPresets.png)
 
 这个面板还是不够直观，我们可以把它看成一张表，上面四个图标用于设置列，左边四个图标用于设置行，也可以直接点击里面的16个图标同时设置行和列。强大的地方是，按住**shift**时能同时设置**pivot**，这时能发现控件虽然不动但position已经在改变。如果按住**alt**，则设置anchor的同时设置**position**。如果shift和alt同时按住，那么你就能同时设置anchor, pivot和position。这个操作方式比起X-UI，真的高明很多，对多分辨率适配很有帮助。
 
@@ -21,25 +21,25 @@ Rect Transform继承自Transform，是uGUI相比X-UI最显著的区别[[注1](#w
 
 排序
 =========
-![SortHierarchy](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/img/SortHierarchy.png)
+![SortHierarchy](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/overview/img/SortHierarchy.png)
 
 uGUI可以直接在Hierarchy面板中上下拖拽来对渲染进行排序(支持程序控制)，越上面的UI会越先被渲染，相比X-UI的global depth排序，这样的拖拽设计很讨好用户。同时在结构上则和ex2D采用的local depth类似，这样GO只和同级其它GO进行排序，开发组件会很方便。需要注意的是，这里排序只是相对UI而言，其它3D物体还是按原先的次序渲染，并且UI总是渲染在3D物体上面。这就导致你不能像用ex2D那样直接将粒子系统插入到两个UI之间。
 
 控件
 =========
-![UI Component](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/img/UiComponent.png)
+![UI Component](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/overview/img/UiComponent.png)
 
 uGUI自带了以上控件，其中Image用于显示Sprite，Raw Image用于显示Texture，Image Mask和Rect Mask用于clipping。所有控件都是MonoBehaviour，可以直接从Inspector里拖到其它GameObject上。
 
 #### Image ####
 
-![Image](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/img/Image.png)
+![Image](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/overview/img/Image.png)
 
 uGUI用Image控件显示图片，图片就是一个Sprite，这意味着Pro用户不用再制作atlas了，相比X-UI是个大进步，Free用户一样可以手动做Packing。Image提供了**Simple**, **Sliced**, **Tiled**, **Filled**四种效果，和X-UI保持一致。
 
 #### Button ####
 
-![Button](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/img/ButtonOverview.png)
+![Button](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/overview/img/ButtonOverview.png)
 
 uGUI里，Button控件由两个GameObject组成，一个包含Image, Button等Component，一个包含Text等Component。这样设计很组件化，唯一的问题是当用户想修改Button时，容易不小心选中Label或其它实体。
 
@@ -55,7 +55,7 @@ Button Component主要执行Transition和事件两个操作。
 
 #### Event Trigger ####
 
-![Event Trigger](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/img/EventTrigger.png)
+![Event Trigger](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/overview/img/EventTrigger.png)
 
 uGUI控件往往只提供一个**自带事件**，要响应更多**基本事件**的话，需要添加Event Trigger组件。Event Trigger包含以下事件：
 
@@ -67,13 +67,13 @@ uGUI控件往往只提供一个**自带事件**，要响应更多**基本事件*
 
 #### Graphic Raycaster ####
 
-![Graphic Raycaster](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/img/GraphicRaycaster.png)
+![Graphic Raycaster](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/overview/img/GraphicRaycaster.png)
 
 每个Canvas都有一个Graphic Raycaster，用于获取用户选中的uGUI控件。多个Canvas之间通过设置Graphic Raycaster的priority来设置事件响应的先后次序。当Canvas采用World Space或Camera Space时，Graphic Raycaster的Block选项可以用来设置遮挡目标。
 
 #### Event System ####
 
-![Event System](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/img/EventSystem.png)
+![Event System](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/overview/img/EventSystem.png)
 
 创建uGUI控件后，Unity会同时创建一个[[注4](#eventSys)]叫EventSystem的GameObject，用于控制各类事件。可以看到Unity自带了两个Input Module，一个用于响应标准输入，一个用于响应触摸操作。Input Module封装了对Input模块的调用，根据用户操作触发各**Event Trigger**。理论上我们可以编写自己的Input Module，用来封装各种外部设备的输入，只要加入Event System所在的GameObject就行。
 
