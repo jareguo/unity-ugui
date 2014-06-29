@@ -1,4 +1,4 @@
-初探Unity4.6新UI系统(uGUI)
+Unity4.6新UI系统初探(uGUI)
 ==========
 
 引言
