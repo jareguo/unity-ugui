@@ -88,7 +88,7 @@ Event System组件则统一管理多个Input Module和**各种Raycaster**。它�
 小结
 =========
 
-uGUI功能完善，操作简洁，很接地气。可以说uGUI是相对X-UI的全面升级，整体架构更为严谨，实现更为清晰。作为ex2D v2.0开发者之一，我很看好它将来的发展，uGUI将在大多数场合取代X-UI。
+uGUI功能完善，操作简洁，很接地气。可以说uGUI是相对X-UI的全面升级，整体架构更为严谨，实现更为清晰。依托4.5的Module Manager，uGUI以Package的形式提供，也能获得快速的升级[[注5](#package)]。作为ex2D v2.0开发者之一，我很看好它将来的发展，uGUI将在大多数场合取代X-UI。
 
 初步感受：
 
@@ -110,7 +110,7 @@ uGUI功能完善，操作简洁，很接地气。可以说uGUI是相对X-UI的�
 2. <a name="why_canvas"></a>我不能完全肯定一定是Canvas，但通过Canvas和CanvasRenderer的接口来看，这个可能性很大。
 3. <a name="why_CanvasRenderer_better"></a>基于更好的平衡CPU和GPU负载 + 更优化的batching算法，以Unity的实力CanvasRenderer超越SpriteRenderer问题不大。而且如果性能不会提升，uGUI只要像**2D Toolkit**那样给每个控件直接添加MeshRenderer，也就是说uGUI直接用已有的SpriteRenderer就好，不太可能加入新的CanvasRenderer性能反而更慢。
 4. <a name="eventSys"></a>Unity允许多个Event System同时存在，但同一时刻只有一个能够生效。
-5. Unity的部分UI模块以包的形式提供，位于程序目录下的*Editor\Data\UnityExtensions\Unity\GUISystem\4.6.0*，Unity提供了两个运行时版本的DLL，分别用于创作和发布。区别主要是发布版不含一些Editor中才用得到的代码。由于DLL没办法通过预编译符号来进行条件编译，因此Unity使用这种方式进行权衡，用户发布时无需手工切换DLL版本，满足了闭源，又兼顾了执行效率。~~这样就甩开了第三方插件几条街，很多插件在这个问题上不是牺牲性能就是无奈开源。~~
+5. <a name="package"></a>uGUI的控件、Event等模块以包的形式提供，位于程序目录下的*%UNITY%\Editor\Data\UnityExtensions\Unity\GUISystem\4.6.0*，Unity提供了两个运行时版本的DLL，分别用于创作和发布。区别主要是发布版不含一些Editor中才用得到的代码。由于DLL没办法通过预编译符号来进行条件编译，因此Unity使用这种方式进行权衡，用户发布时无需手工切换DLL版本，满足了闭源，又兼顾了执行效率。~~这样就甩开了第三方插件几条街，很多插件在这个问题上不是牺牲性能就是无奈开源。~~
 
 > [Jare](http://weibo.com/u/1751917933) @ [梦加网络](http://www.mechanist.co/cn/)
 
