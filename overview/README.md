@@ -3,7 +3,7 @@ Unity4.6新UI系统初探(uGUI)
 
 引言
 =========
-Unity终于在即将到来的**4.6**版本内集成了**所见即所得**的UI解决方案[(视频)](http://blogs.unity3d.com/2014/05/28/overview-of-the-new-ui-system/)。事实上从近几个版本开始，Unity就在为这套系统做技术扩展，以保证最终能实现较理想的UI系统。本文试图通过初步的介绍和试用，让读者对这套系统有大体的了解，以便更进一步评估这套UI系统好不好用，适合用在什么项目。为了避免坑挖太深，更进一步的试用和评估我将在下一篇文章中进行测试。为论述方便，下文将这套New UI System简称为**uGUI**，并且以**X-UI**指代现有第三方UI插件。
+Unity终于在即将到来的**4.6**版本内集成了**所见即所得**的UI解决方案[(视频)](http://blogs.unity3d.com/2014/05/28/overview-of-the-new-ui-system/)。事实上从近几个版本开始，Unity就在为这套系统做技术扩展，以保证最终能实现较理想的UI系统。本文试图通过初步的介绍和试用，让读者对这套系统有大体的了解，以便更进一步评估这套UI系统好不好用，适合用在什么项目。为了避免坑挖太深，更进一步的试用和评估我将在《[用uGUI开发自定义Toggle Slider控件](https://github.com/jaredoc/unity-ugui/tree/master/toggle_demo)》中进行论述。为论述方便，下文将这套New UI System简称为**uGUI**，并且以**X-UI**指代现有第三方UI插件。
 
 （测试只针对Unity 4.6.0 beta 10，正式版可能会有所出入。目前Unity没提供文档，本人半桶水，欢迎群众在微博或Issues里吐槽！）
 
@@ -24,6 +24,8 @@ Rect Transform继承自Transform，是uGUI相比X-UI最显著的区别[[注1](#w
 ![SortHierarchy](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/overview/img/SortHierarchy.png)
 
 uGUI可以直接在Hierarchy面板中上下拖拽来对渲染进行排序(支持程序控制)，越上面的UI会越先被渲染，相比X-UI的global depth排序，这样的拖拽设计很讨好用户。同时在结构上则和ex2D采用的local depth类似，这样GO只和同级其它GO进行排序，开发组件会很方便。需要注意的是，这里排序只是相对UI而言，其它3D物体还是按原先的次序渲染，并且UI总是渲染在3D物体上面。这就导致你不能像用ex2D那样直接将粒子系统插入到两个UI之间。
+
+<a name="draw_call_problem"></a>这种无需填写depth值的排序方式，容易导致**没有手工做sprite packing的free版用户**遇到draw call增加。因为所有物体的depth都是自动设置的，Unity保证了每个物体的depth都是唯一的。这时假设你有一个**格子**控件，每个控件用到了两个Sprite，但你并没有把Sprite都拼到同一张贴图上。于是你每复制一个新的格子出来，draw call就会增加2个，因为Unity会以格子为单位依次绘制。pro用户由于有sprite packing机制，不用担心这个问题。（这种情况在ex2D里，是以默认提供"unordered"的渲染方式来解决的，这也是NGUI的默认做法。在这种情况下ex2D会优先以相同depth的相同Sprite为单位绘制，因此不论有多少个格子，draw call都是2个。除非你就是希望以格子为单位进行渲染[[注6](#why_ordered)]，那么你可以在ex2D里设置渲染方式为"ordered"，或者在NGUI里给每个格子设置不同的depth。
 
 控件
 =========
@@ -98,11 +100,18 @@ uGUI功能完善，操作简洁，很接地气。可以说uGUI是相对X-UI的�
 - 直接在Hierarchy中排序
 - Pro用户可用Sprite的动态拼图，无需手工拼图
 
-#### 小问题 ####
+#### 不足 ####
+- [无需填写depth值的排序方式，容易导致**没有手工做sprite packing的free版用户**遇到draw call增加。](#draw_call_problem)
+
+#### 小遗憾 ####
 - Anchor Presets面板还不够直观。
 - 用户想修改Button时，很容易修改到Label。
-- Input组件对方向键的支持有问题。
 - 当Hierarchy面板内的目标节点展开子节点后，无法将其它节点直接拖动到目标的正下方。
+
+#### 小问题 ####
+- Input组件对方向键的支持有问题。
+- Game View dock到主窗口后，top定位有误，把toolbar的高度也算进去了。
+
 
 附注
 =========
@@ -111,6 +120,7 @@ uGUI功能完善，操作简洁，很接地气。可以说uGUI是相对X-UI的�
 3. <a name="why_CanvasRenderer_better"></a>基于更好的平衡CPU和GPU负载 + 更优化的batching算法，以Unity的实力CanvasRenderer超越SpriteRenderer问题不大。而且如果性能不会提升，uGUI只要像**2D Toolkit**那样给每个控件直接添加MeshRenderer，也就是说uGUI直接用已有的SpriteRenderer就好，不太可能加入新的CanvasRenderer性能反而更慢。
 4. <a name="eventSys"></a>Unity允许多个Event System同时存在，但同一时刻只有一个能够生效。
 5. <a name="package"></a>uGUI的控件、Event等模块以包的形式提供，位于程序目录下的*%UNITY%\Editor\Data\UnityExtensions\Unity\GUISystem\4.6.0*，Unity提供了两个运行时版本的DLL，分别用于创作和发布。区别主要是发布版不含一些Editor中才用得到的代码。由于DLL没办法通过预编译符号来进行条件编译，因此Unity使用这种方式进行权衡，用户发布时无需手工切换DLL版本，满足了闭源，又兼顾了执行效率。~~这样就甩开了第三方插件几条街，很多插件在这个问题上不是牺牲性能就是无奈开源。~~
+6. <a name="why_ordered"></a>有时还是会需要以格子为单位渲染，例如当格子之间需要重合，这种需求在UI里不常见。
 
 > [Jare](http://weibo.com/u/1751917933) @ [梦加网络](http://www.mechanist.co/cn/)
 

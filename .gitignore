@@ -1,0 +1,7 @@
+Assembly-CSharp.csproj
+Assembly-CSharp-vs.csproj
+Library/
+obj
+*.sln
+*.suo
+*.csproj
