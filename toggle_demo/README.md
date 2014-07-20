@@ -112,8 +112,9 @@ Toggle Slider对象包含的Toggle Slider组件是唯一一个直接和控件有
 小结
 ----------
 
-uGui功能和用户体验方面都做的不错，是我看到过最贴近Unity风格的UI系统。稳定性方面有小问题，不过作为测试版可以理解，已经超过了我的预期(之前以为会和4.0的刚推出Mecanim一样bug一堆)。性能方面暂时不做测试，因为这个demo里的Sprite用的都是独立贴图，只有pro版Unity才支持自动packing。之后我会更换素材再进行更准确测试。
+uGui功能和用户体验方面都做的不错，是我看到过最贴近Unity风格的UI系统。稳定性方面有小问题，不过作为测试版可以理解，已经超过了我的预期(之前以为会和4.0的刚推出Mecanim一样bug一堆)。
 
+**性能**方面，两个工程我都实现了相同的PackedBenchMark场景，里面各包含了30个ToggleSlider，为了公平uGUI版本去掉了所有ImageMask，两边实测drawcall一致。从**帧率**上看在编辑器下NGUI性能优于uGUI大约20%！估计是因为NGUI在最近几个版本中完善了batching机制，而uGUI并没有采用**前一篇文章**所说的"更优的"batch算法，而是把batching粗暴的交给了显卡驱动完成。如果有pro版的话使用profiler查看一下两边的CPU/GPU占用就能知道答案。
 
 > [Jare](http://weibo.com/u/1751917933) @ [梦加网络](http://www.mechanist.co/cn/)
 
