@@ -5,7 +5,6 @@ using System.Collections;
 [AddComponentMenu("UI/ToggleSlider", 50), RequireComponent(typeof(RectTransform))]
 public class ToggleSlider : MonoBehaviour {
 
-    public string animName = "ToggleSlider";
     public float slideDistance = 100f;
 
 #if UNITY_EDITOR
@@ -43,7 +42,7 @@ public class ToggleSlider : MonoBehaviour {
 
     public void Start () {
         anim = animation;
-        animState = anim[animName];
+        animState = anim[anim.clip.name];
         // reset effects
         percent = 0;
         Sample();
@@ -77,7 +76,7 @@ public class ToggleSlider : MonoBehaviour {
     }
 
     public void Sample () {
-        anim.Play(animName);
+        anim.Play(anim.clip.name);
         animState.speed = 0.0f;
         anim.Sample();
     }
@@ -86,6 +85,6 @@ public class ToggleSlider : MonoBehaviour {
     private void PlayEffects() {
         animState.speed = isOn_ ? 1.0f : -1.0f;
         percent = Mathf.Clamp01(percent);
-        anim.Play(animName);
+        anim.Play(anim.clip.name);
     }
 }
