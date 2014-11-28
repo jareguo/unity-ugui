@@ -41,7 +41,7 @@ public class ToggleSlider : MonoBehaviour {
     private bool dragging = false;
 
     public void Start () {
-        anim = animation;
+        anim = GetComponent<Animation>();
         animState = anim[anim.clip.name];
         // reset effects
         percent = 0;
