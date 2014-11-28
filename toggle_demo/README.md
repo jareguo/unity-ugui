@@ -1,14 +1,14 @@
 用uGUI开发自定义Toggle Slider控件
 ==========
 
-写完《[Unity4.6新UI系统初探](https://github.com/jaredoc/unity-ugui/tree/master/overview)》后，我模仿手机上的UI分别用**uGui**和**NGUI**做了一个仅用作演示的ToggleSlider，我认为这个小小的控件已能体现自定义控件的开发过程。由于手头上没有mac版，暂时未能真机测试，PC上的效果如下：
+写完《[Unity4.6新UI系统初探](https://github.com/jareguo/unity-ugui/tree/master/overview)》后，我模仿手机上的UI分别用**uGui**和**NGUI**做了一个仅用作演示的ToggleSlider，我认为这个小小的控件已能体现自定义控件的开发过程。由于手头上没有mac版，暂时未能真机测试，PC上的效果如下：
 
-![uGui Toggle Slider](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/toggle_demo/img/uGuiToggleSlider.gif)
+![uGui Toggle Slider](https://raw.githubusercontent.com/jareguo/unity-ugui/master/toggle_demo/img/uGuiToggleSlider.gif)
 
 制作过程
 ----------
 
-完整工程托管于[github](https://github.com/jaredoc/unity-ugui/tree/master/toggle_demo)，分为[uGui](https://github.com/jaredoc/unity-ugui/tree/master/toggle_demo/ugui_project)和[NGUI](https://github.com/jaredoc/unity-ugui/tree/master/toggle_demo/ngui_project)两个project。考虑到版权问题，工程里不含NGUI，同学们需自行将NGUI导进工程。NGUI需要Unity 4.5，uGui需要Unity 4.6。
+完整工程托管于[github](https://github.com/jareguo/unity-ugui/tree/master/toggle_demo)，分为[uGui](https://github.com/jareguo/unity-ugui/tree/master/toggle_demo/ugui_project)和[NGUI](https://github.com/jareguo/unity-ugui/tree/master/toggle_demo/ngui_project)两个project。考虑到版权问题，工程里不含NGUI，同学们需自行将NGUI导进工程。NGUI需要Unity 4.5，uGui需要Unity 4.6。
 
 ### 功能点 ###
 
@@ -22,7 +22,7 @@
 
 ### Hierarchy ###
 
-![uGui Toggle Slider](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/toggle_demo/img/uGuiHierarchy.png)
+![uGui Toggle Slider](https://raw.githubusercontent.com/jareguo/unity-ugui/master/toggle_demo/img/uGuiHierarchy.png)
 
 上图是用uGui制作好的层级结构。其中，
 
@@ -40,24 +40,24 @@
 
 ### Toggle Slider GO ###
 
-![uGui Toggle Slider GO](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/toggle_demo/img/uGuiToggleSliderGo.png)
+![uGui Toggle Slider GO](https://raw.githubusercontent.com/jareguo/unity-ugui/master/toggle_demo/img/uGuiToggleSliderGo.png)
 
-Toggle Slider对象包含的Toggle Slider组件是唯一一个直接和控件有关的脚本。代码可在[github](https://github.com/jaredoc/unity-ugui/blob/master/toggle_demo/ugui_project/Assets/ToggleSlider/ToggleSlider.cs)查阅，编写起来很简单。
+Toggle Slider对象包含的Toggle Slider组件是唯一一个直接和控件有关的脚本。代码可在[github](https://github.com/jareguo/unity-ugui/blob/master/toggle_demo/ugui_project/Assets/ToggleSlider/ToggleSlider.cs)查阅，编写起来很简单。
 
 ### Animation ###
 
-![uGui Animation](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/toggle_demo/img/uGuiAnimation.png)
+![uGui Animation](https://raw.githubusercontent.com/jareguo/unity-ugui/master/toggle_demo/img/uGuiAnimation.png)
 
 所有效果都使用Animation组件实现，全部用动画是为了偷懒，毕竟效果怎么实现都可以，这里仅作演示。动画包含四条曲线，分别用于控制两只twitter小鸟、蓝色背景透明度和滑块左右移动。这里简单提几个要点。
 
 - 动画的**反向播放**只需要将AnimationState.speed设为-1。
 - 拖拽滑块时，动画暂停，根据鼠标位移**逐帧**设置动画时间，然后Sample动画。拖拽停止时恢复动画。
-- 在动画里改变透明度时，Image组件不会自动更新，需要添加一个[ColorWatcher](https://github.com/jaredoc/unity-ugui/blob/master/toggle_demo/ugui_project/Assets/Scripts/ColorWatcher.cs)组件，自己触发Image.color的setter。
+- 在动画里改变透明度时，Image组件不会自动更新，需要添加一个[ColorWatcher](https://github.com/jareguo/unity-ugui/blob/master/toggle_demo/ugui_project/Assets/Scripts/ColorWatcher.cs)组件，自己触发Image.color的setter。
 - 动画设为ClampForever，因为Once无法在AnimationState中保留最后一帧的状态。
 
 ### Event ###
 
-![uGui Handle Go](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/toggle_demo/img/uGuiHandleGo.png)
+![uGui Handle Go](https://raw.githubusercontent.com/jareguo/unity-ugui/master/toggle_demo/img/uGuiHandleGo.png)
 
 事件使用两个**Event Trigger**组件进行响应。一个在Toggle Slider对象里，负责响应OnPointerUp，实现当点击控件时，调用ToggleSlider.Toggle()。另一个在Handle对象里(如图)，负责响应Drag事件，实现当拖动时调用ToggleSlider.OnDrag()。
 
@@ -84,7 +84,7 @@ Toggle Slider对象包含的Toggle Slider组件是唯一一个直接和控件有
 
 作为对比，我也用NGUI的测试版(3.6.4b)做了一样的demo，花了不少时间。uGui的事件问题也在NGUI里遇到了，甚至更严重，此外还有其它问题。
 
-![NGUI Toggle Slider](https://raw.githubusercontent.com/jaredoc/unity-ugui/master/toggle_demo/img/NGuiToggleSlider.gif)
+![NGUI Toggle Slider](https://raw.githubusercontent.com/jareguo/unity-ugui/master/toggle_demo/img/NGuiToggleSlider.gif)
 
 - **NGUI的padding设置挺繁琐的**，uGui只要Rect Transform点下stretch，Left/Top/Right/Bottom全写20就行。
 
@@ -118,4 +118,4 @@ uGui功能和用户体验方面都做的不错，是我看到过最贴近Unity�
 
 > [Jare](http://weibo.com/u/1751917933) @ [梦加网络](http://www.mechanist.co/cn/)
 
-> 本文托管于 https://github.com/jaredoc/unity-ugui/tree/master/toggle_demo 欢迎Fork、提Issue或转载
+> 本文托管于 https://github.com/jareguo/unity-ugui/tree/master/toggle_demo 欢迎Fork、提Issue或转载
