@@ -124,4 +124,4 @@ uGUI功能完善，操作简洁，很接地气。可以说uGUI是相对X-UI的�
 
 > [Jare](http://weibo.com/u/1751917933) @ [梦加网络](http://www.mechanist.co/cn/)
 
-> 本文托管于 https://github.com/jaredoc/unity-ugui/tree/master/overview 欢迎Fork、提Issue或转载
+> 本文托管于 https://github.com/jareguo/unity-ugui/tree/master/overview 欢迎Fork、提Issue或转载
